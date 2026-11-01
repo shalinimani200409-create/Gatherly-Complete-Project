@@ -40,9 +40,9 @@ export const Confirmation: React.FC<ConfirmationProps> = ({ bookings, notify }) 
   return (
     <main className="page wrap narrow confirmation-container">
       {/* Top Back Navigation */}
-      <div className="flex items-center justify-between gap-3 mb-6">
+      <div className="flex items-center gap-3 mb-6 flex-wrap">
         <BackButton to="/bookings" label="Back to Bookings" />
-        <div className="breadcrumb !mb-0">
+        <div className="breadcrumb !mb-0 text-sm">
           <Link to="/">Home</Link>
           <span>/</span>
           <span className="text-slate-900 font-bold">Confirmation Voucher</span>
@@ -83,20 +83,20 @@ export const Confirmation: React.FC<ConfirmationProps> = ({ bookings, notify }) 
       {/* Official Booking Voucher Card */}
       {b && (
         <div className="voucher-card">
-          <div className="voucher-header">
+          <div className="voucher-header flex flex-col sm:flex-row justify-between sm:items-center gap-3">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Official Booking Voucher</span>
-              <h3 className="text-2xl font-black text-slate-900">{b.service}</h3>
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">{b.service}</h3>
             </div>
-            <div className="text-right">
-              <span className="text-xs text-slate-500 font-bold block">REFERENCE NO.</span>
-              <span className="text-lg font-mono font-black text-blue-600 bg-blue-50 px-3 py-1 rounded-md inline-block">
+            <div className="text-left sm:text-right">
+              <span className="text-[11px] text-slate-500 font-bold block mb-1">REFERENCE NO.</span>
+              <span className="text-base sm:text-lg font-mono font-black text-blue-600 bg-blue-50 px-3 py-1 rounded-md inline-block border border-blue-100">
                 {b.id}
               </span>
             </div>
           </div>
 
-          <div className="voucher-details-grid">
+          <div className="voucher-details-grid grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="voucher-field">
               <span>Primary Guest</span>
               <b>{b.customer}</b>
@@ -135,11 +135,11 @@ export const Confirmation: React.FC<ConfirmationProps> = ({ bookings, notify }) 
             </div>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex items-center justify-between text-xs text-slate-600">
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-600">
             <span>Show this reference at reception or arrival for seamless access.</span>
             <button 
               onClick={handlePrint}
-              className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1.5"
+              className="btn btn-outline text-xs font-bold py-1.5 px-3 flex items-center gap-1.5 self-end sm:self-auto"
             >
               <Printer size={15} />
               <span>Print Voucher</span>

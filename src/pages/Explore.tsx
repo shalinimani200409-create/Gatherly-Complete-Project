@@ -27,6 +27,7 @@ export const Explore: React.FC<ExploreProps> = ({ wishlist, toggleWishlist }) =>
   const [sortOption, setSortOption] = useState('Recommended');
   const [maxPrice, setMaxPrice] = useState(30000);
   const [minRating, setMinRating] = useState('Any rating');
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Filter Logic
   const filteredServices = useMemo(() => {
@@ -157,14 +158,40 @@ export const Explore: React.FC<ExploreProps> = ({ wishlist, toggleWishlist }) =>
         </div>
       </div>
 
+      {/* Mobile Filter Toggle Button */}
+      <div className="md:hidden mb-4">
+        <button 
+          type="button" 
+          onClick={() => setShowMobileFilters(!showMobileFilters)} 
+          className="flex items-center justify-between w-full p-3.5 bg-white border border-slate-200 rounded-xl font-bold text-sm text-slate-800 shadow-xs"
+        >
+          <span className="flex items-center gap-2">
+            <SlidersHorizontal size={17} className="text-blue-600" /> 
+            <span>Refine & Filter Catalog</span>
+          </span>
+          <span className="text-xs text-blue-600 font-extrabold bg-blue-50 px-2 py-0.5 rounded">
+            {showMobileFilters ? 'Hide Filters ▲' : 'Show Filters ▼'}
+          </span>
+        </button>
+      </div>
+
       {/* Explore Layout: Left Sidebar Filters + Right Results Grid */}
       <div className="explore-layout">
         {/* Sidebar Filters */}
-        <aside className="filters-sidebar">
-          <h3>
-            <SlidersHorizontal size={18} className="text-blue-600" />
-            <span>Refine Results</span>
-          </h3>
+        <aside className={`filters-sidebar ${showMobileFilters ? 'block' : 'hidden md:block'}`}>
+          <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+            <h3 className="!mb-0 !pb-0 !border-none">
+              <SlidersHorizontal size={18} className="text-blue-600" />
+              <span>Refine Results</span>
+            </h3>
+            <button 
+              type="button"
+              onClick={handleResetFilters}
+              className="text-xs text-blue-600 font-bold hover:underline"
+            >
+              Reset
+            </button>
+          </div>
 
           {/* Price Range Slider */}
           <div className="filter-group">

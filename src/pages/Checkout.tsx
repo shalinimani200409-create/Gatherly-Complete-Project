@@ -118,7 +118,7 @@ export const Checkout: React.FC<CheckoutProps> = ({ bookings, notify }) => {
           </h2>
 
           {/* Payment Method Pills */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
             <button
               type="button"
               onClick={() => setPaymentMethod('card')}

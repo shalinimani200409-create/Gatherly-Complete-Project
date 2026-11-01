@@ -37,13 +37,13 @@ export const Profile: React.FC<ProfileProps> = ({ role, notify }) => {
         <p>Update your personal information and contact details.</p>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm max-w-xl mx-auto">
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-8 shadow-sm max-w-xl mx-auto">
         <div className="flex items-center gap-4 pb-6 border-b border-slate-100 mb-6">
-          <div className="w-16 h-16 rounded-full bg-blue-600 text-white font-extrabold text-xl flex items-center justify-center shadow-md">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-blue-600 text-white font-extrabold text-xl flex items-center justify-center shadow-md flex-shrink-0">
             {role === 'admin' ? 'AD' : role === 'provider' ? 'FP' : 'AK'}
           </div>
-          <div>
-            <h3 className="text-xl font-bold text-slate-900">{name}</h3>
+          <div className="min-w-0">
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900 truncate">{name}</h3>
             <span className="text-xs font-bold text-blue-600 uppercase bg-blue-50 px-2.5 py-0.5 rounded-full inline-block mt-1">
               {role} Account
             </span>
@@ -94,14 +94,14 @@ export const Profile: React.FC<ProfileProps> = ({ role, notify }) => {
             />
           </div>
 
-          <div className="pt-4 flex items-center justify-between">
-            <button type="submit" className="btn btn-primary">
+          <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <button type="submit" className="btn btn-primary w-full sm:w-auto">
               Save Profile Changes
             </button>
             <button 
               type="button" 
               onClick={() => navigate('/dashboard')}
-              className="btn btn-outline text-xs"
+              className="btn btn-outline text-xs w-full sm:w-auto"
             >
               Go to Dashboard
             </button>

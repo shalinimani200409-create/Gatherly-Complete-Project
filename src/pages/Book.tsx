@@ -121,7 +121,7 @@ export const Book: React.FC<BookProps> = ({ addBooking, notify }) => {
             <span>1. Date & Time Selection</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div className="form-group">
               <label className="form-label" htmlFor="book-date">Preferred Date</label>
               <input 
@@ -198,7 +198,7 @@ export const Book: React.FC<BookProps> = ({ addBooking, notify }) => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="form-group">
               <label className="form-label" htmlFor="book-email">Email Address</label>
               <input 

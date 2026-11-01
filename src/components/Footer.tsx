@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { 
   Compass, Send, CheckCircle2, Shield, Heart, 
   ShieldCheck, Lock, Globe, Instagram, Linkedin, Twitter, 
-  ArrowRight, Sparkles 
+  Facebook, Youtube, ArrowRight, Sparkles, Mail, Phone, MapPin
 } from 'lucide-react';
 
 interface FooterProps {
@@ -25,59 +25,79 @@ export const Footer: React.FC<FooterProps> = ({ notify }) => {
     <footer className="footer">
       <div className="wrap">
         <div className="footer-main">
-          {/* Brand Col */}
+          {/* Brand Column */}
           <div className="footer-col">
-            <Link to="/" className="brand">
+            <Link to="/" className="brand" aria-label="Gatherly Home">
               <div className="brand-icon-wrap">
                 <Compass size={20} />
               </div>
-              <span className="text-white">Gatherly<span className="brand-dot">.</span></span>
+              <span className="text-white font-extrabold tracking-tight">
+                Gatherly<span className="brand-dot">.</span>
+              </span>
             </Link>
             <p>
               Your premier all-in-one platform for booking curated luxury stays, scenic expeditions, artisan dining tables, and everyday wellness appointments.
             </p>
             <div className="footer-security-badge">
               <ShieldCheck size={16} className="text-blue-400 flex-shrink-0" />
-              <span>Verified Hosts & Secure Demo Booking Guarantee</span>
+              <span>Verified Hosts & Secure Demo Guarantee</span>
             </div>
 
-            {/* Social Links */}
+            {/* Social Links with Balanced Centered Icons */}
             <div className="footer-social-links">
               <a 
-                href="#twitter" 
-                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly Twitter / X channel'); }}
-                className="footer-social-btn" 
-                title="Follow on Twitter / X"
-                aria-label="Twitter"
-              >
-                <Twitter size={16} />
-              </a>
-              <a 
                 href="#instagram" 
-                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly Instagram'); }}
+                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly Instagram channel'); }}
                 className="footer-social-btn" 
                 title="Follow on Instagram"
                 aria-label="Instagram"
               >
-                <Instagram size={16} />
+                <Instagram size={17} />
               </a>
               <a 
                 href="#linkedin" 
-                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly LinkedIn'); }}
+                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly LinkedIn page'); }}
                 className="footer-social-btn" 
                 title="Connect on LinkedIn"
                 aria-label="LinkedIn"
               >
-                <Linkedin size={16} />
+                <Linkedin size={17} />
+              </a>
+              <a 
+                href="#facebook" 
+                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly Facebook page'); }}
+                className="footer-social-btn" 
+                title="Connect on Facebook"
+                aria-label="Facebook"
+              >
+                <Facebook size={17} />
+              </a>
+              <a 
+                href="#youtube" 
+                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly YouTube channel'); }}
+                className="footer-social-btn" 
+                title="Subscribe on YouTube"
+                aria-label="YouTube"
+              >
+                <Youtube size={17} />
+              </a>
+              <a 
+                href="#twitter" 
+                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly Twitter / X channel'); }}
+                className="footer-social-btn" 
+                title="Follow on X / Twitter"
+                aria-label="Twitter"
+              >
+                <Twitter size={17} />
               </a>
               <a 
                 href="#global" 
                 onClick={(e) => { e.preventDefault(); notify('Gatherly Global Network Coverage'); }}
                 className="footer-social-btn" 
-                title="Global Network"
+                title="Global Network Coverage"
                 aria-label="Global Network"
               >
-                <Globe size={16} />
+                <Globe size={17} />
               </a>
             </div>
           </div>
@@ -129,6 +149,7 @@ export const Footer: React.FC<FooterProps> = ({ notify }) => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  aria-label="Email for newsletter subscription"
                 />
                 <button type="submit" className="btn btn-primary w-full py-2.5 text-sm flex items-center justify-center gap-2">
                   <Send size={15} />
@@ -143,7 +164,7 @@ export const Footer: React.FC<FooterProps> = ({ notify }) => {
           </div>
         </div>
 
-        {/* Bottom bar */}
+        {/* Bottom Bar */}
         <div className="footer-bottom">
           <div className="flex items-center gap-2 flex-wrap">
             <span>© 2026 Gatherly Platform Inc. All rights reserved.</span>
@@ -163,4 +184,5 @@ export const Footer: React.FC<FooterProps> = ({ notify }) => {
     </footer>
   );
 };
+
 export default Footer;

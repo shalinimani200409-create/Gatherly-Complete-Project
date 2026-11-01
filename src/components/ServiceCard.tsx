@@ -74,7 +74,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ s, isFav = false, onTo
         </div>
 
         {/* Title */}
-        <Link to={`/service/${s.id}`} className="service-card-title line-clamp-1" title={s.name}>
+        <Link to={`/service/${s.id}`} className="service-card-title line-clamp-2 min-h-[44px]" title={s.name}>
           {s.name}
         </Link>
 

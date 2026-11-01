@@ -155,7 +155,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   return (
     <main className="dashboard-layout wrap">
       {/* ========================================================
-          SIDEBAR NAVIGATION
+          SIDEBAR NAVIGATION (Desktop Sticky & Mobile Top Header)
           ======================================================== */}
       <aside className="dash-sidebar">
         {/* User / Partner Header Badge */}
@@ -163,8 +163,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
           <div className="dash-user-avatar">
             {role === 'admin' ? 'AD' : role === 'provider' ? 'FP' : 'AK'}
           </div>
-          <div className="dash-user-info">
-            <b>{role === 'admin' ? 'Platform Administrator' : role === 'provider' ? 'Fern Hospitality' : customerName}</b>
+          <div className="dash-user-info min-w-0">
+            <b className="truncate">{role === 'admin' ? 'Platform Administrator' : role === 'provider' ? 'Fern Hospitality' : customerName}</b>
             <span>{role.toUpperCase()} WORKSPACE</span>
           </div>
         </div>
@@ -340,7 +340,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </button>
           </div>
 
-          <button onClick={handleLogout} className="dash-logout-btn w-full">
+          <button onClick={handleLogout} className="dash-logout-btn w-full justify-center">
             <LogOut size={16} />
             <span>Sign Out (Demo)</span>
           </button>
@@ -351,39 +351,41 @@ export const Dashboard: React.FC<DashboardProps> = ({
           MAIN CONTENT AREA
           ======================================================== */}
       <section className="dash-main-area">
-        {/* Dynamic Back Navigation for Customer, Provider, and Admin dashboards (hidden on the main 'Overview' dashboard) */}
+        {/* Single Consolidated Dashboard Breadcrumb / Back Navigation Bar */}
         {!isMainDashboard && (
-          <div className="flex items-center justify-between gap-3 mb-6 p-3.5 bg-blue-50/80 border border-blue-200/80 rounded-2xl flex-wrap shadow-xs">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between gap-3 mb-6 p-2.5 sm:p-3 bg-blue-50/70 border border-blue-200/80 rounded-2xl flex-wrap">
+            <div className="flex items-center gap-2.5 flex-wrap">
               <button
                 type="button"
                 onClick={handleBackToMainDashboard}
-                className="btn-back"
-                title="Return to Main Dashboard Overview"
+                className="btn-back text-xs py-1.5 px-3"
+                title="Back to Dashboard Overview"
               >
-                <ArrowLeft size={16} className="btn-back-icon" />
-                <span>Back to Dashboard Overview</span>
+                <ArrowLeft size={15} className="btn-back-icon" />
+                <span>Back to Overview</span>
               </button>
               <div className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
-                <span>{role.charAt(0).toUpperCase() + role.slice(1)} Dashboard</span>
+                <button 
+                  type="button" 
+                  onClick={handleBackToMainDashboard} 
+                  className="text-blue-700 hover:underline font-bold"
+                >
+                  {role.charAt(0).toUpperCase() + role.slice(1)} Dashboard
+                </button>
                 <span>/</span>
-                <span className="text-blue-600 font-bold">{currentTab}</span>
+                <span className="text-slate-800 font-bold">{currentTab}</span>
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={handleBackToMainDashboard}
-              className="text-xs font-bold text-blue-700 hover:text-blue-900 flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-blue-200 shadow-2xs hover:bg-blue-50 transition"
-            >
-              <LayoutDashboard size={14} />
-              <span>Main Overview</span>
-            </button>
+            <Link to="/explore" className="btn btn-outline text-xs font-bold py-1.5 px-3 hidden sm:inline-flex">
+              <span>View Live Website</span>
+              <ArrowRight size={13} />
+            </Link>
           </div>
         )}
 
         {/* Topbar Greeting */}
-        <div className="dash-topbar">
+        <div className="dash-topbar flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <div>
             <span className="eyebrow">{role.toUpperCase()} CONTROL PANEL</span>
             <h1>
@@ -400,20 +402,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5">
-            {!isMainDashboard && (
-              <button
-                type="button"
-                onClick={handleBackToMainDashboard}
-                className="btn-back text-xs py-2 px-3"
-                title="Return to Main Dashboard Overview"
-              >
-                <ArrowLeft size={14} className="btn-back-icon" />
-                <span>Back to Overview</span>
-              </button>
-            )}
-            <Link to="/explore" className="btn btn-outline text-xs font-bold py-2 px-3 hidden sm:inline-flex">
-              View Website
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <Link to="/explore" className="btn btn-outline text-xs font-bold py-2 px-3">
+              Browse Platform
             </Link>
           </div>
         </div>
@@ -485,18 +476,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <p>Track your upcoming hotel stays, dining slots, and guided excursions.</p>
                   </div>
                   <div className="flex items-center gap-3">
-                    {customerTab === 'My Bookings' && (
-                      <button 
-                        type="button" 
-                        onClick={handleBackToMainDashboard}
-                        className="btn-back text-xs py-1.5 px-3"
-                        title="Return to Main Overview"
-                      >
-                        <ArrowLeft size={14} className="btn-back-icon" />
-                        <span>Back to Overview</span>
-                      </button>
-                    )}
-                    <Link to="/explore" className="text-link text-xs">
+                    <Link to="/explore" className="text-link text-xs font-bold">
                       <span>Browse more services</span>
                       <ArrowRight size={14} />
                     </Link>
@@ -569,15 +549,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <h3>Past & Completed Bookings</h3>
                     <p>Archived reservations from previous trips and appointments.</p>
                   </div>
-                  <button 
-                    type="button" 
-                    onClick={handleBackToMainDashboard}
-                    className="btn-back text-xs py-1.5 px-3"
-                    title="Return to Main Overview"
-                  >
-                    <ArrowLeft size={14} className="btn-back-icon" />
-                    <span>Back to Overview</span>
-                  </button>
                 </div>
 
                 <div className="dash-table-wrap">
@@ -603,13 +574,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                             <span className={`status-pill ${b.status.toLowerCase()}`}>{b.status}</span>
                           </td>
                           <td>
-                            <button 
-                              onClick={() => notify('Review submitted in demo prototype!')}
-                              className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1"
-                            >
-                              <Star size={13} className="fill-amber-400 text-amber-400" />
-                              <span>Rate Experience</span>
-                            </button>
+                            <span className="text-xs text-amber-600 font-bold">★★★★★ 5.0</span>
                           </td>
                         </tr>
                       ))}
@@ -624,51 +589,44 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <div className="dash-panel">
                 <div className="dash-panel-header">
                   <div>
-                    <h3>Saved Services & Wishlist</h3>
-                    <p>Places and activities you have saved for future reservations.</p>
+                    <h3>Saved Experiences & Wishlist ({wishlist.length})</h3>
+                    <p>Your favorite destinations and listings bookmarked for future trips.</p>
                   </div>
-                  <button 
-                    type="button" 
-                    onClick={handleBackToMainDashboard}
-                    className="btn-back text-xs py-1.5 px-3"
-                    title="Return to Main Overview"
-                  >
-                    <ArrowLeft size={14} className="btn-back-icon" />
-                    <span>Back to Overview</span>
-                  </button>
                 </div>
 
                 {wishlist.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {services.filter((s) => wishlist.includes(s.id)).map((s) => (
-                      <div key={s.id} className="border border-slate-200 rounded-xl p-4 flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                          <img src={s.image} alt={s.name} className="w-16 h-16 rounded-lg object-cover" />
-                          <div>
-                            <span className="text-xs font-bold text-blue-600">{s.category}</span>
-                            <b className="text-sm font-bold text-slate-900 block">{s.name}</b>
-                            <span className="text-xs text-slate-500">{formatMoney(s.price)}</span>
+                      <div key={s.id} className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm flex flex-col">
+                        <img src={s.image} alt={s.name} className="h-40 w-full object-cover" />
+                        <div className="p-4 flex flex-col flex-1">
+                          <span className="text-xs font-bold text-blue-600 mb-1">{s.category}</span>
+                          <h4 className="font-bold text-slate-900 text-sm mb-2">{s.name}</h4>
+                          <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <b className="text-sm font-extrabold">{formatMoney(s.price)}</b>
+                            <div className="flex items-center gap-2">
+                              <button 
+                                onClick={() => toggleWishlist(s.id)}
+                                className="text-xs font-semibold text-slate-500 hover:text-rose-600"
+                              >
+                                Remove
+                              </button>
+                              <Link to={`/book/${s.id}`} className="btn btn-primary text-xs py-1 px-3">
+                                Book
+                              </Link>
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Link to={`/book/${s.id}`} className="btn btn-primary text-xs py-2 px-3">
-                            Book Now
-                          </Link>
-                          <button 
-                            onClick={() => toggleWishlist(s.id)} 
-                            className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg"
-                            title="Remove"
-                          >
-                            <Trash2 size={16} />
-                          </button>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="text-center py-12 text-slate-400">
-                    <Heart size={40} className="mx-auto mb-2 text-slate-300" />
-                    <p>Your wishlist is currently empty. Click the heart icon on any service to save it here!</p>
+                    <Heart size={36} className="mx-auto mb-2 text-slate-300" />
+                    <p className="font-medium text-sm">No saved services in your wishlist yet.</p>
+                    <Link to="/explore" className="btn btn-primary text-xs mt-3 inline-flex">
+                      Explore Catalog
+                    </Link>
                   </div>
                 )}
               </div>
@@ -679,18 +637,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <div className="dash-panel max-w-xl">
                 <div className="dash-panel-header">
                   <div>
-                    <h3>Profile & Notification Settings</h3>
-                    <p>Manage your account credentials and booking alert preferences.</p>
+                    <h3>Profile & Contact Preferences</h3>
+                    <p>Update your personal information for faster booking checkout.</p>
                   </div>
-                  <button 
-                    type="button" 
-                    onClick={handleBackToMainDashboard}
-                    className="btn-back text-xs py-1.5 px-3"
-                    title="Return to Main Overview"
-                  >
-                    <ArrowLeft size={14} className="btn-back-icon" />
-                    <span>Back to Overview</span>
-                  </button>
                 </div>
 
                 <div className="space-y-4">
@@ -700,7 +649,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                       type="text" 
                       value={customerName} 
                       onChange={(e) => setCustomerName(e.target.value)} 
-                      className="form-input"
+                      className="form-input" 
                     />
                   </div>
                   <div className="form-group">
@@ -709,44 +658,44 @@ export const Dashboard: React.FC<DashboardProps> = ({
                       type="email" 
                       value={customerEmail} 
                       onChange={(e) => setCustomerEmail(e.target.value)} 
-                      className="form-input"
+                      className="form-input" 
                     />
                   </div>
                   <div className="form-group">
                     <label className="form-label">Phone Number</label>
                     <input 
-                      type="text" 
+                      type="tel" 
                       value={customerPhone} 
                       onChange={(e) => setCustomerPhone(e.target.value)} 
-                      className="form-input"
+                      className="form-input" 
                     />
                   </div>
 
-                  <div className="pt-4 border-t border-slate-200">
-                    <h4 className="text-sm font-bold text-slate-900 mb-3">Notification Preferences</h4>
-                    <label className="flex items-center gap-3 cursor-pointer text-sm font-semibold text-slate-700 mb-2">
+                  <div className="pt-2 border-t border-slate-100">
+                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Notification Channels</h4>
+                    <label className="flex items-center gap-2.5 text-xs text-slate-700 font-semibold mb-2 cursor-pointer">
                       <input 
                         type="checkbox" 
                         checked={notifEmail} 
                         onChange={(e) => setNotifEmail(e.target.checked)} 
-                        className="w-4 h-4 text-blue-600 rounded"
+                        className="rounded text-blue-600" 
                       />
-                      <span>Receive email confirmations and itinerary updates</span>
+                      <span>Email confirmation receipts</span>
                     </label>
-                    <label className="flex items-center gap-3 cursor-pointer text-sm font-semibold text-slate-700">
+                    <label className="flex items-center gap-2.5 text-xs text-slate-700 font-semibold cursor-pointer">
                       <input 
                         type="checkbox" 
                         checked={notifSms} 
                         onChange={(e) => setNotifSms(e.target.checked)} 
-                        className="w-4 h-4 text-blue-600 rounded"
+                        className="rounded text-blue-600" 
                       />
-                      <span>Receive SMS reminder alerts prior to check-in</span>
+                      <span>Day-of-service SMS reminders</span>
                     </label>
                   </div>
 
                   <button 
-                    onClick={() => notify('Profile preferences saved successfully!')} 
-                    className="btn btn-primary mt-4"
+                    onClick={() => notify('Profile preferences updated.')} 
+                    className="btn btn-primary mt-2"
                   >
                     Save Changes
                   </button>
@@ -772,29 +721,31 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     </div>
                   </div>
                   <div className="metric-card-val">{providerListings.length}</div>
-                  <span className="metric-card-sub text-blue-600">Live in catalog</span>
+                  <span className="metric-card-sub text-blue-600">Published online</span>
                 </div>
 
                 <div className="metric-card">
                   <div className="metric-card-header">
-                    <span className="metric-card-label">Booking Requests</span>
-                    <div className="metric-card-icon bg-orange-50 text-orange-600">
+                    <span className="metric-card-label">Total Bookings</span>
+                    <div className="metric-card-icon bg-emerald-50 text-emerald-600">
                       <CalendarCheck size={22} />
                     </div>
                   </div>
-                  <div className="metric-card-val">{bookings.length + 8}</div>
-                  <span className="metric-card-sub text-orange-600">All demo reservations</span>
+                  <div className="metric-card-val">{bookings.length}</div>
+                  <span className="metric-card-sub">Active customers</span>
                 </div>
 
                 <div className="metric-card">
                   <div className="metric-card-header">
-                    <span className="metric-card-label">Monthly Gross Revenue</span>
-                    <div className="metric-card-icon bg-emerald-50 text-emerald-600">
-                      <DollarSign size={22} />
+                    <span className="metric-card-label">Net Earnings</span>
+                    <div className="metric-card-icon bg-purple-50 text-purple-600">
+                      <Wallet size={22} />
                     </div>
                   </div>
-                  <div className="metric-card-val">₹2,48,500</div>
-                  <span className="metric-card-sub text-emerald-600">+14% vs last month</span>
+                  <div className="metric-card-val">
+                    {formatMoney(bookings.reduce((sum, b) => sum + b.amount, 0))}
+                  </div>
+                  <span className="metric-card-sub text-purple-600">Ready for payout</span>
                 </div>
 
                 <div className="metric-card">
@@ -819,17 +770,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <p>Approve, confirm, or manage incoming customer bookings for your listings.</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    {providerTab === 'Manage Bookings' && (
-                      <button 
-                        type="button" 
-                        onClick={handleBackToMainDashboard}
-                        className="btn-back text-xs py-1.5 px-3"
-                        title="Return to Main Overview"
-                      >
-                        <ArrowLeft size={14} className="btn-back-icon" />
-                        <span>Back to Overview</span>
-                      </button>
-                    )}
                     <button 
                       onClick={() => setProviderTab('Add New Service')} 
                       className="btn btn-primary text-xs py-2 px-3 flex items-center gap-1.5"
@@ -902,15 +842,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   </div>
                   <div className="flex items-center gap-2">
                     <button 
-                      type="button" 
-                      onClick={handleBackToMainDashboard}
-                      className="btn-back text-xs py-1.5 px-3"
-                      title="Return to Main Overview"
-                    >
-                      <ArrowLeft size={14} className="btn-back-icon" />
-                      <span>Back to Overview</span>
-                    </button>
-                    <button 
                       onClick={() => setProviderTab('Add New Service')} 
                       className="btn btn-primary text-xs py-2 px-3 flex items-center gap-1.5"
                     >
@@ -963,15 +894,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <h3>Publish a New Service Listing</h3>
                     <p>Fill out listing specifications to instantly add to the demo marketplace.</p>
                   </div>
-                  <button 
-                    type="button" 
-                    onClick={() => setProviderTab('Manage Services')}
-                    className="btn-back text-xs py-1.5 px-3"
-                    title="Back to Manage Services"
-                  >
-                    <ArrowLeft size={14} className="btn-back-icon" />
-                    <span>Back to Services</span>
-                  </button>
                 </div>
 
                 <form onSubmit={handleCreateService} className="space-y-4">
@@ -987,7 +909,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="form-group">
                       <label className="form-label">Category</label>
                       <select 
@@ -1013,7 +935,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="form-group">
                       <label className="form-label">Location / City</label>
                       <input 
@@ -1056,15 +978,15 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     />
                   </div>
 
-                  <div className="flex gap-3 pt-3">
-                    <button type="submit" className="btn btn-primary">
+                  <div className="flex flex-col sm:flex-row gap-3 pt-3">
+                    <button type="submit" className="btn btn-primary w-full sm:w-auto">
                       <Plus size={16} />
                       <span>Publish Listing to Marketplace</span>
                     </button>
                     <button 
                       type="button" 
                       onClick={() => setProviderTab('Manage Services')}
-                      className="btn btn-outline"
+                      className="btn btn-outline w-full sm:w-auto"
                     >
                       Cancel
                     </button>
@@ -1081,18 +1003,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <h3>Merchant Earnings & Payouts</h3>
                     <p>Overview of booking proceeds and automated payout schedules.</p>
                   </div>
-                  <button 
-                    type="button" 
-                    onClick={handleBackToMainDashboard}
-                    className="btn-back text-xs py-1.5 px-3"
-                    title="Return to Main Overview"
-                  >
-                    <ArrowLeft size={14} className="btn-back-icon" />
-                    <span>Back to Overview</span>
-                  </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                   <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl">
                     <span className="text-xs font-bold text-slate-500 uppercase block">Total Net Disbursed</span>
                     <b className="text-2xl font-black text-slate-900">₹8,42,650</b>
@@ -1113,15 +1026,15 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 <div className="bg-white border border-slate-200 rounded-xl p-5">
                   <h4 className="text-sm font-bold text-slate-900 mb-3">Recent Payout Logs</h4>
                   <div className="space-y-3 text-xs">
-                    <div className="flex justify-between py-2 border-b border-slate-100">
+                    <div className="flex justify-between py-2 border-b border-slate-100 flex-wrap gap-2">
                       <span>Payout #PO-88219 (Bank Transfer)</span>
                       <b>₹68,400 · Completed (28 Oct 2026)</b>
                     </div>
-                    <div className="flex justify-between py-2 border-b border-slate-100">
+                    <div className="flex justify-between py-2 border-b border-slate-100 flex-wrap gap-2">
                       <span>Payout #PO-88192 (Bank Transfer)</span>
                       <b>₹54,200 · Completed (21 Oct 2026)</b>
                     </div>
-                    <div className="flex justify-between py-2 border-b border-slate-100">
+                    <div className="flex justify-between py-2 border-b border-slate-100 flex-wrap gap-2">
                       <span>Payout #PO-88145 (Bank Transfer)</span>
                       <b>₹72,800 · Completed (14 Oct 2026)</b>
                     </div>
@@ -1138,15 +1051,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <h3>Partner Business Profile</h3>
                     <p>Details displayed on your public service listings.</p>
                   </div>
-                  <button 
-                    type="button" 
-                    onClick={handleBackToMainDashboard}
-                    className="btn-back text-xs py-1.5 px-3"
-                    title="Return to Main Overview"
-                  >
-                    <ArrowLeft size={14} className="btn-back-icon" />
-                    <span>Back to Overview</span>
-                  </button>
                 </div>
 
                 <div className="space-y-4">
@@ -1243,15 +1147,15 @@ export const Dashboard: React.FC<DashboardProps> = ({
                       <span className="status-pill confirmed">+18.4% YoY</span>
                     </div>
 
-                    <div className="h-44 flex items-end gap-3 pt-6 pb-2 px-2 border-b border-slate-100">
+                    <div className="h-44 flex items-end gap-2 sm:gap-3 pt-6 pb-2 px-1 sm:px-2 border-b border-slate-100 overflow-x-auto no-scrollbar">
                       {[42, 58, 47, 73, 61, 88, 68, 95, 74, 82, 66, 100].map((h, i) => (
-                        <div key={i} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+                        <div key={i} className="flex-1 min-w-[18px] sm:min-w-[24px] flex flex-col items-center gap-2 h-full justify-end group">
                           <div 
                             style={{ height: `${h}%` }}
                             className="w-full max-w-[28px] bg-gradient-to-t from-blue-600 to-indigo-500 rounded-t-md transition-all group-hover:brightness-110"
                             title={`Month ${i + 1}: ${h * 7} bookings`}
                           />
-                          <span className="text-[11px] font-bold text-slate-400">
+                          <span className="text-[10px] sm:text-[11px] font-bold text-slate-400">
                             {['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'][i]}
                           </span>
                         </div>
@@ -1361,15 +1265,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <h3>Registered Customers Directory</h3>
                     <p>Manage customer account statuses and booking access.</p>
                   </div>
-                  <button 
-                    type="button" 
-                    onClick={handleBackToMainDashboard}
-                    className="btn-back text-xs py-1.5 px-3"
-                    title="Return to Main Overview"
-                  >
-                    <ArrowLeft size={14} className="btn-back-icon" />
-                    <span>Back to Overview</span>
-                  </button>
                 </div>
 
                 <div className="dash-table-wrap">
@@ -1423,15 +1318,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <h3>Verified Merchant Partners & Providers</h3>
                     <p>Audit provider quality, active catalog listings, and certifications.</p>
                   </div>
-                  <button 
-                    type="button" 
-                    onClick={handleBackToMainDashboard}
-                    className="btn-back text-xs py-1.5 px-3"
-                    title="Return to Main Overview"
-                  >
-                    <ArrowLeft size={14} className="btn-back-icon" />
-                    <span>Back to Overview</span>
-                  </button>
                 </div>
 
                 <div className="dash-table-wrap">
@@ -1485,15 +1371,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <h3>All Platform Service Listings ({services.length})</h3>
                     <p>Review and moderate listings across all categories.</p>
                   </div>
-                  <button 
-                    type="button" 
-                    onClick={handleBackToMainDashboard}
-                    className="btn-back text-xs py-1.5 px-3"
-                    title="Return to Main Overview"
-                  >
-                    <ArrowLeft size={14} className="btn-back-icon" />
-                    <span>Back to Overview</span>
-                  </button>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1523,18 +1400,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <h3>Service Categories & Accents</h3>
                     <p>The 9 core categories with dedicated brand color accents.</p>
                   </div>
-                  <button 
-                    type="button" 
-                    onClick={handleBackToMainDashboard}
-                    className="btn-back text-xs py-1.5 px-3"
-                    title="Return to Main Overview"
-                  >
-                    <ArrowLeft size={14} className="btn-back-icon" />
-                    <span>Back to Overview</span>
-                  </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {categories.map((c) => (
                     <div key={c.name} className="border border-slate-200 rounded-xl p-4 bg-slate-50 flex items-center justify-between">
                       <div>
@@ -1558,15 +1426,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <h3>Global Booking Management</h3>
                     <p>Comprehensive transaction log and master status overrides.</p>
                   </div>
-                  <button 
-                    type="button" 
-                    onClick={handleBackToMainDashboard}
-                    className="btn-back text-xs py-1.5 px-3"
-                    title="Return to Main Overview"
-                  >
-                    <ArrowLeft size={14} className="btn-back-icon" />
-                    <span>Back to Overview</span>
-                  </button>
                 </div>
 
                 <div className="dash-table-wrap">
@@ -1623,18 +1482,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <h3>Platform Financial Metrics & GMV</h3>
                     <p>Detailed gross merchandise value and net commission earnings.</p>
                   </div>
-                  <button 
-                    type="button" 
-                    onClick={handleBackToMainDashboard}
-                    className="btn-back text-xs py-1.5 px-3"
-                    title="Return to Main Overview"
-                  >
-                    <ArrowLeft size={14} className="btn-back-icon" />
-                    <span>Back to Overview</span>
-                  </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                   <div className="border border-slate-200 p-4 rounded-xl bg-slate-50">
                     <span className="text-xs font-bold text-slate-400 uppercase block">Total GMV</span>
                     <b className="text-2xl font-black text-slate-900">₹14,82,900</b>
@@ -1664,3 +1514,5 @@ export const Dashboard: React.FC<DashboardProps> = ({
     </main>
   );
 };
+
+export default Dashboard;

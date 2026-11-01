@@ -79,11 +79,6 @@ export const Home: React.FC<HomeProps> = ({ wishlist, toggleWishlist, notify }) 
       <section className="hero">
         <div className="hero-image-bg" />
         <div className="wrap hero-content">
-          {window.history?.length > 1 && (
-            <div className="mb-4">
-              <BackButton variant="hero" label="Back to Previous Page" />
-            </div>
-          )}
           <motion.div 
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}

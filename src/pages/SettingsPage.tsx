@@ -33,7 +33,7 @@ export const SettingsPage: React.FC<SettingsProps> = ({ notify }) => {
         <p>Control communication channels and security options.</p>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm max-w-xl mx-auto space-y-6">
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-8 shadow-sm max-w-xl mx-auto space-y-6">
         <div>
           <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
             <Bell size={18} className="text-blue-600" />

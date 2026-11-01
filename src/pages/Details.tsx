@@ -60,8 +60,6 @@ export const Details: React.FC<DetailsProps> = ({ wishlist, toggleWishlist }) =>
             </span>
           </div>
         </div>
-
-        <BackButton to="/explore" label="Back" />
       </div>
 
       {/* Multi-Image Showcase Gallery */}
