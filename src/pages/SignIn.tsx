@@ -20,7 +20,7 @@ export const SignIn: React.FC<SignInProps> = ({ setRole, notify }) => {
   return (
     <main className="page wrap narrow flex flex-col items-center justify-center min-h-[75vh] py-8">
       <div className="w-full max-w-lg mb-4 flex justify-start">
-        <BackButton to="/" label="Back to Home" />
+        <BackButton fallbackTo="/" label="Back" />
       </div>
       <div className="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 shadow-xl max-w-lg w-full text-center">
         <div className="w-16 h-16 rounded-2xl bg-blue-600 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/20">

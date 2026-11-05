@@ -1,0 +1,17 @@
+Gatherly UI Refresh — SRDV-inspired visual styling
+
+Changes made:
+- Updated only src/styles/premium-ui.css with a visual theme refresh.
+- Added a clean white / navy / royal-blue palette, refined cards, buttons, header,
+  hero/search panel, dashboard surfaces, responsive refinements, and CSS transitions.
+- No React/TypeScript components, routes, data, booking flows, authentication,
+  role behavior, or business logic were edited.
+
+To run locally:
+1. Open the Gatherly folder.
+2. Run: npm install
+3. Run: npm run dev
+
+Note: A production build could not be verified in this environment because the
+dependency installation did not complete successfully. The original source files
+were otherwise kept unchanged.

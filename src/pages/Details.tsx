@@ -4,7 +4,7 @@ import {
   MapPin, Star, Check, ShieldCheck, ArrowRight, 
   Building2, ArrowLeft, Clock, CalendarDays, Award
 } from 'lucide-react';
-import { services } from '../data';
+import { services, handleImageError } from '../data';
 import { ServiceCard } from '../components/ServiceCard';
 import { BackButton } from '../components/BackButton';
 
@@ -17,7 +17,10 @@ export const Details: React.FC<DetailsProps> = ({ wishlist, toggleWishlist }) =>
   const { id } = useParams();
   const navigate = useNavigate();
   const service = services.find((x) => x.id === Number(id)) || services[0];
-  const related = services.filter((x) => x.category === service.category && x.id !== service.id).slice(0, 3);
+  const related = services.filter((x) => 
+    (x.subcategory === service.subcategory || x.section === service.section || x.category === service.category) && 
+    x.id !== service.id
+  ).slice(0, 3);
   const fallbackRelated = related.length > 0 ? related : services.filter((x) => x.id !== service.id).slice(0, 3);
 
   const formatMoney = (n: number) => '₹' + n.toLocaleString('en-IN');
@@ -26,13 +29,21 @@ export const Details: React.FC<DetailsProps> = ({ wishlist, toggleWishlist }) =>
     <main className="page wrap">
       {/* Breadcrumb Navigation & Back Button */}
       <div className="flex items-center gap-3 mb-5 flex-wrap">
-        <BackButton to="/explore" label="Back to Explore" />
+        <BackButton fallbackTo="/explore" label="Back" />
         <div className="breadcrumb !mb-0">
           <Link to="/">Home</Link>
           <span>/</span>
           <Link to="/explore">Explore</Link>
+          {service.mainCategoryName && (
+            <>
+              <span>/</span>
+              <Link to={`/category/${service.mainCategory || 'travel'}`}>{service.mainCategoryName}</Link>
+            </>
+          )}
           <span>/</span>
-          <Link to={`/category/${encodeURIComponent(service.category)}`}>{service.category}</Link>
+          <Link to={`/explore?subcategory=${encodeURIComponent(service.subcategory || service.category)}`}>
+            {service.subcategory || service.category}
+          </Link>
           <span>/</span>
           <span className="text-slate-900 font-bold">{service.name}</span>
         </div>
@@ -41,7 +52,9 @@ export const Details: React.FC<DetailsProps> = ({ wishlist, toggleWishlist }) =>
       {/* Top Header */}
       <div className="detail-top">
         <div>
-          <span className="eyebrow">{service.category.toUpperCase()}</span>
+          <span className="eyebrow">
+            {(service.subcategory || service.category).toUpperCase()} {service.sectionName ? `· ${service.sectionName.toUpperCase()}` : ''}
+          </span>
           <h1>{service.name}</h1>
           <div className="flex flex-wrap items-center gap-4 text-sm font-semibold text-slate-600">
             <span className="flex items-center gap-1.5 text-slate-700">
@@ -68,16 +81,19 @@ export const Details: React.FC<DetailsProps> = ({ wishlist, toggleWishlist }) =>
           src={service.image} 
           alt={service.name} 
           className="detail-gallery-main" 
+          onError={handleImageError}
         />
         <img 
           src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop&q=80" 
           alt="Ambiance view" 
           className="detail-gallery-sub" 
+          onError={handleImageError}
         />
         <img 
           src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=80" 
           alt="Suite amenities" 
           className="detail-gallery-sub" 
+          onError={handleImageError}
         />
       </div>
 

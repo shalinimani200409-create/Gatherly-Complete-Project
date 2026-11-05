@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   LayoutDashboard, CalendarCheck, Clock, Users, Building2, 
   Briefcase, Plus, Trash2, Edit3, Check, X, ShieldCheck, 
   Wallet, TrendingUp, Sparkles, LogOut, ArrowRight, ArrowLeft, MapPin, 
   Settings, UserCheck, Star, Heart, CheckCircle2, DollarSign,
-  Layers, Filter, Eye, RefreshCw
+  Layers, Filter, Eye, RefreshCw, Award
 } from 'lucide-react';
-import { services, categories, Service } from '../data';
+import { BackButton } from '../components/BackButton';
+import { services, categories, Service, allSubCategories, categorySections, mainCategories, handleImageError } from '../data';
 
 interface Booking {
   id: string;
@@ -78,6 +80,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   // Provider Add Form State
   const [newServiceName, setNewServiceName] = useState('');
   const [newServiceCategory, setNewServiceCategory] = useState('Hotels & Stays');
+  const [newServiceSubcategory, setNewServiceSubcategory] = useState('Hotels');
   const [newServicePrice, setNewServicePrice] = useState('3200');
   const [newServiceLocation, setNewServiceLocation] = useState('Ooty, Tamil Nadu');
   const [newServiceDuration, setNewServiceDuration] = useState('1 Night stay');
@@ -125,6 +128,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
       id: Date.now(),
       name: newServiceName,
       category: newServiceCategory,
+      subcategory: newServiceSubcategory,
       location: newServiceLocation,
       price: Number(newServicePrice) || 2000,
       rating: 5.0,
@@ -353,31 +357,26 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <section className="dash-main-area">
         {/* Single Consolidated Dashboard Breadcrumb / Back Navigation Bar */}
         {!isMainDashboard && (
-          <div className="flex items-center justify-between gap-3 mb-6 p-2.5 sm:p-3 bg-blue-50/70 border border-blue-200/80 rounded-2xl flex-wrap">
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <button
-                type="button"
+          <div className="flex items-center justify-between gap-3 mb-6 p-2.5 sm:p-3 bg-slate-50 border border-slate-200/90 rounded-2xl flex-wrap">
+            <div className="flex items-center gap-3 flex-wrap">
+              <BackButton
                 onClick={handleBackToMainDashboard}
-                className="btn-back text-xs py-1.5 px-3"
-                title="Back to Dashboard Overview"
-              >
-                <ArrowLeft size={15} className="btn-back-icon" />
-                <span>Back to Overview</span>
-              </button>
+                label="Back"
+              />
               <div className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
                 <button 
                   type="button" 
                   onClick={handleBackToMainDashboard} 
-                  className="text-blue-700 hover:underline font-bold"
+                  className="text-slate-700 hover:text-blue-600 font-bold"
                 >
                   {role.charAt(0).toUpperCase() + role.slice(1)} Dashboard
                 </button>
                 <span>/</span>
-                <span className="text-slate-800 font-bold">{currentTab}</span>
+                <span className="text-blue-600 font-bold">{currentTab}</span>
               </div>
             </div>
 
-            <Link to="/explore" className="btn btn-outline text-xs font-bold py-1.5 px-3 hidden sm:inline-flex">
+            <Link to="/explore" className="btn btn-outline text-xs font-bold py-2 px-3 hidden sm:inline-flex">
               <span>View Live Website</span>
               <ArrowRight size={13} />
             </Link>
@@ -413,57 +412,85 @@ export const Dashboard: React.FC<DashboardProps> = ({
             CUSTOMER DASHBOARD PANELS
             ---------------------------------------------------- */}
         {role === 'customer' && (
-          <div>
+          <motion.div key={customerTab} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
             {/* Metric Cards - shown on Overview page */}
             {customerTab === 'Overview' && (
               <div className="metrics-grid">
-                <div className="metric-card">
+                <motion.div 
+                  whileHover={{ y: -4 }} 
+                  transition={{ duration: 0.2 }}
+                  className="metric-card"
+                >
                   <div className="metric-card-header">
                     <span className="metric-card-label">Total Bookings</span>
                     <div className="metric-card-icon bg-blue-50 text-blue-600">
-                      <CalendarCheck size={22} />
+                      <CalendarCheck size={20} />
                     </div>
                   </div>
                   <div className="metric-card-val">{bookings.length}</div>
-                  <span className="metric-card-sub text-blue-600">All reservations</span>
-                </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-600">
+                    <TrendingUp size={13} />
+                    <span>All active reservations</span>
+                  </div>
+                </motion.div>
 
-                <div className="metric-card">
+                <motion.div 
+                  whileHover={{ y: -4 }} 
+                  transition={{ duration: 0.2 }}
+                  className="metric-card"
+                >
                   <div className="metric-card-header">
                     <span className="metric-card-label">Confirmed & Upcoming</span>
                     <div className="metric-card-icon bg-emerald-50 text-emerald-600">
-                      <CheckCircle2 size={22} />
+                      <CheckCircle2 size={20} />
                     </div>
                   </div>
                   <div className="metric-card-val">
                     {bookings.filter((b) => b.status === 'Confirmed').length}
                   </div>
-                  <span className="metric-card-sub">Ready when you are</span>
-                </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
+                    <Check size={13} />
+                    <span>Ready when you are</span>
+                  </div>
+                </motion.div>
 
-                <div className="metric-card">
+                <motion.div 
+                  whileHover={{ y: -4 }} 
+                  transition={{ duration: 0.2 }}
+                  className="metric-card"
+                >
                   <div className="metric-card-header">
-                    <span className="metric-card-label">Completed</span>
+                    <span className="metric-card-label">Completed Stays</span>
                     <div className="metric-card-icon bg-amber-50 text-amber-600">
-                      <Clock size={22} />
+                      <Clock size={20} />
                     </div>
                   </div>
                   <div className="metric-card-val">
                     {bookings.filter((b) => b.status === 'Completed').length}
                   </div>
-                  <span className="metric-card-sub text-amber-600">Great memories</span>
-                </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-600">
+                    <Star size={13} className="fill-amber-500" />
+                    <span>Past great memories</span>
+                  </div>
+                </motion.div>
 
-                <div className="metric-card">
+                <motion.div 
+                  whileHover={{ y: -4 }} 
+                  transition={{ duration: 0.2 }}
+                  className="metric-card"
+                >
                   <div className="metric-card-header">
                     <span className="metric-card-label">Saved Wishlist</span>
-                    <div className="metric-card-icon bg-pink-50 text-pink-600">
-                      <Heart size={22} />
+                    <div className="metric-card-icon bg-rose-50 text-rose-600">
+                      <Heart size={20} />
                     </div>
                   </div>
                   <div className="metric-card-val">{wishlist.length}</div>
-                  <span className="metric-card-sub text-pink-600">Favorites</span>
-                </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-rose-600">
+                    <Sparkles size={13} />
+                    <span>Curated favorites</span>
+                  </div>
+                </motion.div>
               </div>
             )}
 
@@ -598,7 +625,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {services.filter((s) => wishlist.includes(s.id)).map((s) => (
                       <div key={s.id} className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm flex flex-col">
-                        <img src={s.image} alt={s.name} className="h-40 w-full object-cover" />
+                        <img 
+                          src={s.image} 
+                          alt={s.name} 
+                          className="h-40 w-full object-cover object-center" 
+                          onError={handleImageError} 
+                        />
                         <div className="p-4 flex flex-col flex-1">
                           <span className="text-xs font-bold text-blue-600 mb-1">{s.category}</span>
                           <h4 className="font-bold text-slate-900 text-sm mb-2">{s.name}</h4>
@@ -702,62 +734,90 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 </div>
               </div>
             )}
-          </div>
+          </motion.div>
         )}
 
         {/* ----------------------------------------------------
             PROVIDER DASHBOARD PANELS
             ---------------------------------------------------- */}
         {role === 'provider' && (
-          <div>
+          <motion.div key={providerTab} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
             {/* Metric Cards - shown on Overview page */}
             {providerTab === 'Overview' && (
               <div className="metrics-grid">
-                <div className="metric-card">
+                <motion.div 
+                  whileHover={{ y: -4 }} 
+                  transition={{ duration: 0.2 }}
+                  className="metric-card"
+                >
                   <div className="metric-card-header">
                     <span className="metric-card-label">Active Listings</span>
                     <div className="metric-card-icon bg-blue-50 text-blue-600">
-                      <Layers size={22} />
+                      <Layers size={20} />
                     </div>
                   </div>
                   <div className="metric-card-val">{providerListings.length}</div>
-                  <span className="metric-card-sub text-blue-600">Published online</span>
-                </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-600">
+                    <CheckCircle2 size={13} />
+                    <span>Published & live online</span>
+                  </div>
+                </motion.div>
 
-                <div className="metric-card">
+                <motion.div 
+                  whileHover={{ y: -4 }} 
+                  transition={{ duration: 0.2 }}
+                  className="metric-card"
+                >
                   <div className="metric-card-header">
                     <span className="metric-card-label">Total Bookings</span>
                     <div className="metric-card-icon bg-emerald-50 text-emerald-600">
-                      <CalendarCheck size={22} />
+                      <CalendarCheck size={20} />
                     </div>
                   </div>
                   <div className="metric-card-val">{bookings.length}</div>
-                  <span className="metric-card-sub">Active customers</span>
-                </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
+                    <TrendingUp size={13} />
+                    <span>Active customer volume</span>
+                  </div>
+                </motion.div>
 
-                <div className="metric-card">
+                <motion.div 
+                  whileHover={{ y: -4 }} 
+                  transition={{ duration: 0.2 }}
+                  className="metric-card"
+                >
                   <div className="metric-card-header">
                     <span className="metric-card-label">Net Earnings</span>
                     <div className="metric-card-icon bg-purple-50 text-purple-600">
-                      <Wallet size={22} />
+                      <Wallet size={20} />
                     </div>
                   </div>
                   <div className="metric-card-val">
                     {formatMoney(bookings.reduce((sum, b) => sum + b.amount, 0))}
                   </div>
-                  <span className="metric-card-sub text-purple-600">Ready for payout</span>
-                </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-purple-600">
+                    <ShieldCheck size={13} />
+                    <span>Ready for bank payout</span>
+                  </div>
+                </motion.div>
 
-                <div className="metric-card">
+                <motion.div 
+                  whileHover={{ y: -4 }} 
+                  transition={{ duration: 0.2 }}
+                  className="metric-card"
+                >
                   <div className="metric-card-header">
                     <span className="metric-card-label">Merchant Rating</span>
                     <div className="metric-card-icon bg-amber-50 text-amber-600">
-                      <Star size={22} className="fill-amber-500" />
+                      <Star size={20} className="fill-amber-500" />
                     </div>
                   </div>
                   <div className="metric-card-val">4.9 / 5.0</div>
-                  <span className="metric-card-sub">Top Tier Host</span>
-                </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-600">
+                    <Award size={13} />
+                    <span>Verified Hospitality Partner</span>
+                  </div>
+                </motion.div>
               </div>
             )}
 
@@ -854,7 +914,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {providerListings.map((s) => (
                     <div key={s.id} className="border border-slate-200 rounded-xl p-4 flex gap-4 bg-white shadow-sm">
-                      <img src={s.image} alt={s.name} className="w-24 h-24 rounded-lg object-cover flex-shrink-0" />
+                      <img 
+                        src={s.image} 
+                        alt={s.name} 
+                        className="w-24 h-24 rounded-lg object-cover object-center flex-shrink-0" 
+                        onError={handleImageError} 
+                      />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-xs font-bold text-blue-600">{s.category}</span>
@@ -911,7 +976,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="form-group">
-                      <label className="form-label">Category</label>
+                      <label className="form-label">Category Section</label>
                       <select 
                         value={newServiceCategory} 
                         onChange={(e) => setNewServiceCategory(e.target.value)}
@@ -924,12 +989,37 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     </div>
 
                     <div className="form-group">
+                      <label className="form-label">Specific Subcategory (86 Choices)</label>
+                      <select 
+                        value={newServiceSubcategory} 
+                        onChange={(e) => setNewServiceSubcategory(e.target.value)}
+                        className="form-select"
+                      >
+                        {allSubCategories.map((sub) => (
+                          <option key={sub.id} value={sub.name}>{sub.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="form-group">
                       <label className="form-label">Base Starting Price (₹)</label>
                       <input 
                         type="number" 
                         value={newServicePrice} 
                         onChange={(e) => setNewServicePrice(e.target.value)}
                         required
+                        className="form-input"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">Duration / Slot Type</label>
+                      <input 
+                        type="text" 
+                        value={newServiceDuration} 
+                        onChange={(e) => setNewServiceDuration(e.target.value)}
                         className="form-input"
                       />
                     </div>
@@ -948,24 +1038,15 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     </div>
 
                     <div className="form-group">
-                      <label className="form-label">Duration / Slot Type</label>
+                      <label className="form-label">Key Amenities (comma separated)</label>
                       <input 
                         type="text" 
-                        value={newServiceDuration} 
-                        onChange={(e) => setNewServiceDuration(e.target.value)}
+                        value={newServiceFeatures} 
+                        onChange={(e) => setNewServiceFeatures(e.target.value)}
                         className="form-input"
+                        placeholder="e.g. Wi-Fi, Breakfast, Pool, AC"
                       />
                     </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Key Amenities (comma separated)</label>
-                    <input 
-                      type="text" 
-                      value={newServiceFeatures} 
-                      onChange={(e) => setNewServiceFeatures(e.target.value)}
-                      className="form-input"
-                    />
                   </div>
 
                   <div className="form-group">
@@ -1076,60 +1157,88 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 </div>
               </div>
             )}
-          </div>
+          </motion.div>
         )}
 
         {/* ----------------------------------------------------
             ADMIN DASHBOARD PANELS
             ---------------------------------------------------- */}
         {role === 'admin' && (
-          <div>
+          <motion.div key={adminTab} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
             {/* Metric Cards - shown on Overview page */}
             {adminTab === 'Overview' && (
               <div className="metrics-grid">
-                <div className="metric-card">
+                <motion.div 
+                  whileHover={{ y: -4 }} 
+                  transition={{ duration: 0.2 }}
+                  className="metric-card"
+                >
                   <div className="metric-card-header">
                     <span className="metric-card-label">Registered Customers</span>
                     <div className="metric-card-icon bg-blue-50 text-blue-600">
-                      <Users size={22} />
+                      <Users size={20} />
                     </div>
                   </div>
                   <div className="metric-card-val">1,428</div>
-                  <span className="metric-card-sub text-blue-600">+12% this month</span>
-                </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-600">
+                    <TrendingUp size={13} />
+                    <span>+12.4% this month</span>
+                  </div>
+                </motion.div>
 
-                <div className="metric-card">
+                <motion.div 
+                  whileHover={{ y: -4 }} 
+                  transition={{ duration: 0.2 }}
+                  className="metric-card"
+                >
                   <div className="metric-card-header">
                     <span className="metric-card-label">Verified Providers</span>
                     <div className="metric-card-icon bg-emerald-50 text-emerald-600">
-                      <Building2 size={22} />
+                      <Building2 size={20} />
                     </div>
                   </div>
                   <div className="metric-card-val">58</div>
-                  <span className="metric-card-sub text-emerald-600">Across 6 categories</span>
-                </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
+                    <CheckCircle2 size={13} />
+                    <span>Across 14 sections</span>
+                  </div>
+                </motion.div>
 
-                <div className="metric-card">
+                <motion.div 
+                  whileHover={{ y: -4 }} 
+                  transition={{ duration: 0.2 }}
+                  className="metric-card"
+                >
                   <div className="metric-card-header">
                     <span className="metric-card-label">Total Bookings</span>
                     <div className="metric-card-icon bg-purple-50 text-purple-600">
-                      <CalendarCheck size={22} />
+                      <CalendarCheck size={20} />
                     </div>
                   </div>
                   <div className="metric-card-val">684</div>
-                  <span className="metric-card-sub text-purple-600">99.4% fulfillment rate</span>
-                </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-purple-600">
+                    <ShieldCheck size={13} />
+                    <span>99.4% fulfillment rate</span>
+                  </div>
+                </motion.div>
 
-                <div className="metric-card">
+                <motion.div 
+                  whileHover={{ y: -4 }} 
+                  transition={{ duration: 0.2 }}
+                  className="metric-card"
+                >
                   <div className="metric-card-header">
                     <span className="metric-card-label">Platform GMV</span>
                     <div className="metric-card-icon bg-amber-50 text-amber-600">
-                      <TrendingUp size={22} />
+                      <TrendingUp size={20} />
                     </div>
                   </div>
                   <div className="metric-card-val">₹14,82,900</div>
-                  <span className="metric-card-sub text-amber-600">+18.4% growth</span>
-                </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-600">
+                    <TrendingUp size={13} />
+                    <span>+18.4% YoY growth</span>
+                  </div>
+                </motion.div>
               </div>
             )}
 
@@ -1376,7 +1485,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {services.map((s) => (
                     <div key={s.id} className="border border-slate-200 rounded-xl p-4 flex gap-4 bg-white">
-                      <img src={s.image} alt={s.name} className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+                      <img 
+                        src={s.image} 
+                        alt={s.name} 
+                        className="w-20 h-20 rounded-lg object-cover object-center flex-shrink-0" 
+                        onError={handleImageError} 
+                      />
                       <div className="flex-1 min-w-0">
                         <span className="text-xs font-bold text-blue-600">{s.category}</span>
                         <h4 className="text-sm font-bold text-slate-900 truncate">{s.name}</h4>
@@ -1397,23 +1511,52 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <div className="dash-panel">
                 <div className="dash-panel-header">
                   <div>
-                    <h3>Service Categories & Accents</h3>
-                    <p>The 9 core categories with dedicated brand color accents.</p>
+                    <h3>Platform Taxonomy & Subcategory Architecture</h3>
+                    <p>Managing 3 Main Hubs, 14 Operational Sections, and all 86 Subcategories.</p>
                   </div>
+                  <Link to="/categories" className="btn btn-outline text-xs font-bold py-1.5 px-3">
+                    View Live Portal
+                  </Link>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {categories.map((c) => (
-                    <div key={c.name} className="border border-slate-200 rounded-xl p-4 bg-slate-50 flex items-center justify-between">
-                      <div>
-                        <b className="text-sm font-bold text-slate-900 block">{c.name}</b>
-                        <small className="text-xs text-slate-500">{c.sub}</small>
+                {/* 3 Main Hubs Summary */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  {mainCategories.map((mc) => {
+                    const secCount = categorySections.filter(s => s.mainCategoryId === mc.id).length;
+                    const subCount = allSubCategories.filter(s => s.mainCategoryId === mc.id).length;
+                    return (
+                      <div key={mc.id} className="p-4 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 border border-blue-200/80 rounded-xl">
+                        <span className="text-[10px] font-extrabold uppercase text-blue-700 tracking-wider block">
+                          Main Category Hub
+                        </span>
+                        <h4 className="text-base font-extrabold text-slate-900 mt-1 mb-1">{mc.name}</h4>
+                        <p className="text-xs text-slate-500 mb-3">{mc.description}</p>
+                        <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
+                          <span className="bg-white px-2 py-0.5 rounded border border-slate-200">{secCount} Sections</span>
+                          <span className="bg-blue-600 text-white px-2 py-0.5 rounded">{subCount} Subcategories</span>
+                        </div>
                       </div>
-                      <span className={`status-pill ${c.accent}`}>
-                        Accent: {c.accent}
-                      </span>
-                    </div>
-                  ))}
+                    );
+                  })}
+                </div>
+
+                {/* 14 Sections Grid */}
+                <h4 className="text-sm font-bold text-slate-900 mb-3">All 14 Operational Sections</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                  {categorySections.map((sec) => {
+                    const count = allSubCategories.filter(s => s.sectionId === sec.id).length;
+                    return (
+                      <div key={sec.id} className="border border-slate-200 rounded-xl p-3.5 bg-slate-50 flex items-center justify-between">
+                        <div>
+                          <b className="text-xs font-bold text-slate-900 block">{sec.title}</b>
+                          <small className="text-[11px] text-slate-500">{sec.description.slice(0, 45)}...</small>
+                        </div>
+                        <span className="text-[10px] bg-white border border-slate-200 font-extrabold text-blue-700 px-2 py-0.5 rounded-full flex-shrink-0 ml-2">
+                          {count} Subs
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -1508,7 +1651,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 </div>
               </div>
             )}
-          </div>
+          </motion.div>
         )}
       </section>
     </main>

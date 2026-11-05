@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Heart } from 'lucide-react';
-import { Destination } from '../data';
+import { Destination, handleImageError } from '../data';
 
 interface DestinationCardProps {
   dest: Destination;
@@ -21,6 +21,7 @@ export const DestinationCard: React.FC<DestinationCardProps> = ({ dest, isFav = 
         alt={`${dest.name}, ${dest.country}`} 
         className="destination-card-img" 
         loading="lazy" 
+        onError={handleImageError}
       />
       <div className="destination-card-overlay">
         {/* Top Right Heart Wishlist */}

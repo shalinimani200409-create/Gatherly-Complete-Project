@@ -46,13 +46,22 @@ export const Footer: React.FC<FooterProps> = ({ notify }) => {
             {/* Social Links with Balanced Centered Icons */}
             <div className="footer-social-links">
               <a 
+                href="#twitter" 
+                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly Twitter / X channel'); }}
+                className="footer-social-btn" 
+                title="Follow on X / Twitter"
+                aria-label="Twitter"
+              >
+                <Twitter size={18} />
+              </a>
+              <a 
                 href="#instagram" 
                 onClick={(e) => { e.preventDefault(); notify('Opening Gatherly Instagram channel'); }}
                 className="footer-social-btn" 
                 title="Follow on Instagram"
                 aria-label="Instagram"
               >
-                <Instagram size={17} />
+                <Instagram size={18} />
               </a>
               <a 
                 href="#linkedin" 
@@ -61,34 +70,7 @@ export const Footer: React.FC<FooterProps> = ({ notify }) => {
                 title="Connect on LinkedIn"
                 aria-label="LinkedIn"
               >
-                <Linkedin size={17} />
-              </a>
-              <a 
-                href="#facebook" 
-                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly Facebook page'); }}
-                className="footer-social-btn" 
-                title="Connect on Facebook"
-                aria-label="Facebook"
-              >
-                <Facebook size={17} />
-              </a>
-              <a 
-                href="#youtube" 
-                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly YouTube channel'); }}
-                className="footer-social-btn" 
-                title="Subscribe on YouTube"
-                aria-label="YouTube"
-              >
-                <Youtube size={17} />
-              </a>
-              <a 
-                href="#twitter" 
-                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly Twitter / X channel'); }}
-                className="footer-social-btn" 
-                title="Follow on X / Twitter"
-                aria-label="Twitter"
-              >
-                <Twitter size={17} />
+                <Linkedin size={18} />
               </a>
               <a 
                 href="#global" 
@@ -97,7 +79,25 @@ export const Footer: React.FC<FooterProps> = ({ notify }) => {
                 title="Global Network Coverage"
                 aria-label="Global Network"
               >
-                <Globe size={17} />
+                <Globe size={18} />
+              </a>
+              <a 
+                href="#facebook" 
+                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly Facebook page'); }}
+                className="footer-social-btn" 
+                title="Connect on Facebook"
+                aria-label="Facebook"
+              >
+                <Facebook size={18} />
+              </a>
+              <a 
+                href="#youtube" 
+                onClick={(e) => { e.preventDefault(); notify('Opening Gatherly YouTube channel'); }}
+                className="footer-social-btn" 
+                title="Subscribe on YouTube"
+                aria-label="YouTube"
+              >
+                <Youtube size={18} />
               </a>
             </div>
           </div>
@@ -105,12 +105,11 @@ export const Footer: React.FC<FooterProps> = ({ notify }) => {
           {/* Explore Links */}
           <div className="footer-col">
             <span className="footer-heading">Discover</span>
-            <Link to="/explore">All Experiences</Link>
-            <Link to="/category/Hotels%20%26%20Stays">Hotels & Stays</Link>
-            <Link to="/category/Travel%20%26%20Tours">Tours & Treks</Link>
-            <Link to="/category/Dining%20%26%20Food">Dining & Tables</Link>
-            <Link to="/category/Salon%20%26%20Spa">Salon & Wellness</Link>
-            <Link to="/explore?budget=under-5000">Weekend Getaways</Link>
+            <Link to="/categories">All 86 Subcategories</Link>
+            <Link to="/category/travel">Travel & Accommodation</Link>
+            <Link to="/category/events">Events & Entertainment</Link>
+            <Link to="/category/business">Business & Daily Services</Link>
+            <Link to="/explore">Search All Listings</Link>
           </div>
 
           {/* Account & Dashboards */}

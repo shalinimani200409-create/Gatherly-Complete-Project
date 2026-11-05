@@ -9,11 +9,11 @@ import {
 } from 'lucide-react';
 import { 
   categories, services, destinations, specialOffers, 
-  testimonials, trustStats, whyChoosePoints 
+  testimonials, trustStats, whyChoosePoints,
+  mainCategories, categorySections, allSubCategories 
 } from '../data';
 import { ServiceCard } from '../components/ServiceCard';
 import { DestinationCard } from '../components/DestinationCard';
-import { BackButton } from '../components/BackButton';
 
 interface HomeProps {
   wishlist: number[];
@@ -30,6 +30,7 @@ export const Home: React.FC<HomeProps> = ({ wishlist, toggleWishlist, notify }) 
   const [searchCategory, setSearchCategory] = useState('All categories');
   const [searchDate, setSearchDate] = useState('2026-11-15');
   const [searchBudget, setSearchBudget] = useState('Any Budget');
+  const [homeMainCat, setHomeMainCat] = useState<'travel' | 'events' | 'business'>('travel');
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -251,39 +252,123 @@ export const Home: React.FC<HomeProps> = ({ wishlist, toggleWishlist, notify }) 
         </div>
       </section>
 
-      {/* 3. CATEGORIES SECTION (9-Color Accents) */}
+      {/* 3. CATEGORIES SECTION (Comprehensive 3 Main Hubs, 14 Sections, 86 Subcategories) */}
       <section className="section tinted" id="categories">
         <div className="wrap">
           <div className="section-head">
             <div>
-              <span className="eyebrow">EXPLORE BY CATEGORY</span>
-              <h2>Everything You Need, <em>All In One Spot.</em></h2>
-              <p>Find vetted stays, thrilling excursions, culinary experiences, or everyday appointments.</p>
+              <span className="eyebrow">ALL-IN-ONE BOOKING ECOSYSTEM</span>
+              <h2>Browse By Category & <em>Specialized Services</em></h2>
+              <p>Explore 86 curated subcategories across Travel & Stays, Events & Entertainment, and Business & Daily Services.</p>
             </div>
-            <Link to="/explore" className="text-link">
-              <span>View catalog</span>
+            <Link to="/categories" className="text-link">
+              <span>View all 86 subcategories</span>
               <ArrowRight size={16} />
             </Link>
           </div>
 
-          <div className="category-grid">
-            {categories.map((c) => (
-              <Link 
-                to={`/category/${encodeURIComponent(c.name)}`} 
-                key={c.name}
-                className="category-card"
+          {/* Main Category Interactive Tabs */}
+          <div className="flex items-center gap-2 mb-8 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-2xs max-w-2xl mx-auto overflow-x-auto scrollbar-none">
+            {mainCategories.map((mc) => (
+              <button
+                key={mc.id}
+                type="button"
+                onClick={() => setHomeMainCat(mc.id)}
+                className={`flex-1 min-w-[150px] py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 ${
+                  homeMainCat === mc.id
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                }`}
               >
-                <div className={`category-icon-box ${getAccentClass(c.accent)}`}>
-                  {getCategoryIcon(c.icon)}
-                </div>
-                <div className="category-card-content">
-                  <b>{c.name}</b>
-                  <small>{c.sub}</small>
-                  <span className="category-count-badge">{c.count}+ listings</span>
-                </div>
-                <ArrowUpRight className="cat-arrow" size={18} />
-              </Link>
+                <span>{mc.shortName}</span>
+              </button>
             ))}
+          </div>
+
+          {/* Active Main Category Sections & Subcategories Showcase Grid */}
+          <motion.div 
+            key={homeMainCat}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {categorySections
+              .filter((sec) => sec.mainCategoryId === homeMainCat)
+              .map((sec) => {
+                const subs = allSubCategories.filter((sub) => sub.sectionId === sec.id);
+                return (
+                  <motion.div 
+                    key={sec.id}
+                    whileHover={{ y: -4 }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                    className="group bg-white border border-slate-200/90 hover:border-blue-300 rounded-2xl p-6 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                  >
+                    <div>
+                      {/* Section Header: Clean title + Option Count Pill */}
+                      <div className="flex items-start justify-between gap-3 mb-3">
+                        <span className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50/90 border border-blue-100 px-3 py-1 rounded-lg">
+                          {sec.title}
+                        </span>
+                        <span className="text-xs text-slate-500 font-semibold bg-slate-50 border border-slate-200/70 px-2.5 py-0.5 rounded-full flex-shrink-0">
+                          {subs.length} Options
+                        </span>
+                      </div>
+
+                      {/* Description: Larger, softer, easier to read with proper contrast */}
+                      <p className="text-[13.5px] text-slate-500 font-normal leading-relaxed mb-5 line-clamp-2">
+                        {sec.description}
+                      </p>
+
+                      {/* Subcategory Pills: Elegant rounded pills with smooth hover */}
+                      <div className="flex flex-wrap gap-2 mb-5">
+                        {subs.slice(0, 5).map((sub) => (
+                          <Link
+                            key={sub.id}
+                            to={`/explore?subcategory=${encodeURIComponent(sub.name)}`}
+                            className="text-xs font-medium text-slate-700 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 border border-slate-200/80 px-3 py-1.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5 shadow-2xs"
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                        {subs.length > 5 && (
+                          <Link
+                            to={`/categories`}
+                            className="text-xs font-bold text-blue-600 bg-blue-50/80 hover:bg-blue-100 border border-blue-200/70 px-3 py-1.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5"
+                          >
+                            +{subs.length - 5} more
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Footer: Starting Price & Explore Section Link with arrow animation */}
+                    <div className="pt-4 border-t border-slate-100 flex items-center justify-between mt-auto">
+                      <span className="text-xs text-slate-400 font-medium">
+                        From <strong className="text-slate-800 font-bold">₹{subs[0]?.startingPrice.toLocaleString('en-IN') || '499'}</strong>
+                      </span>
+                      <Link 
+                        to={`/explore?section=${encodeURIComponent(sec.id)}`}
+                        className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1.5 transition-colors group-hover:text-blue-700"
+                      >
+                        <span>Explore section</span>
+                        <ArrowUpRight size={15} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                );
+              })}
+          </motion.div>
+
+          {/* Call-to-action banner for full directory */}
+          <div className="mt-8 text-center">
+            <Link 
+              to="/categories" 
+              className="btn btn-outline inline-flex items-center gap-2 text-xs sm:text-sm font-bold py-3 px-6 rounded-xl"
+            >
+              <span>Explore All 3 Categories, 14 Sections & 86 Subcategories</span>
+              <ArrowRight size={15} />
+            </Link>
           </div>
         </div>
       </section>

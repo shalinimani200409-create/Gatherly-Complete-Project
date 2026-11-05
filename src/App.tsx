@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { CheckCircle2 } from 'lucide-react';
+import { MotionConfig } from 'framer-motion';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { Explore } from './pages/Explore';
+import { CategoryPage } from './pages/CategoryPage';
 import { Details } from './pages/Details';
 import { Book } from './pages/Book';
 import { Checkout } from './pages/Checkout';
@@ -124,6 +126,7 @@ export function App() {
   const activeBookingsCount = bookings.filter((b) => b.status === 'Confirmed').length;
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="min-h-screen flex flex-col bg-white text-slate-800">
       {/* Universal Navigation Header */}
       <Header 
@@ -137,8 +140,10 @@ export function App() {
       <div className="flex-1">
         <Routes>
           <Route path="/" element={<Home wishlist={wishlist} toggleWishlist={toggleWishlist} notify={notify} />} />
-          <Route path="/explore" element={<Explore wishlist={wishlist} toggleWishlist={toggleWishlist} />} />
-          <Route path="/category/:category" element={<Explore wishlist={wishlist} toggleWishlist={toggleWishlist} />} />
+          <Route path="/explore" element={<Explore wishlist={wishlist} toggleWishlist={toggleWishlist} notify={notify} />} />
+          <Route path="/categories" element={<CategoryPage notify={notify} />} />
+          <Route path="/category/:category" element={<CategoryPage notify={notify} />} />
+          <Route path="/category/:category/:section" element={<CategoryPage notify={notify} />} />
           <Route path="/service/:id" element={<Details wishlist={wishlist} toggleWishlist={toggleWishlist} />} />
           <Route path="/book/:id" element={<Book addBooking={addBooking} notify={notify} />} />
           <Route path="/checkout" element={<Checkout bookings={bookings} notify={notify} />} />
@@ -177,6 +182,7 @@ export function App() {
         </div>
       )}
     </div>
+    </MotionConfig>
   );
 }
 

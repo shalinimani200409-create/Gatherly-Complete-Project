@@ -75,7 +75,7 @@ export const Book: React.FC<BookProps> = ({ addBooking, notify }) => {
     <main className="page wrap narrow">
       {/* Breadcrumb Navigation & Back Button */}
       <div className="flex items-center gap-3 mb-5 flex-wrap">
-        <BackButton to={`/service/${service.id}`} label="Back to Details" />
+        <BackButton fallbackTo={`/service/${service.id}`} label="Back" />
         <div className="breadcrumb !mb-0">
           <Link to="/">Home</Link>
           <span>/</span>

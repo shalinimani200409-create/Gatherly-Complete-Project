@@ -1,15 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Star, Heart, Clock, ArrowRight } from 'lucide-react';
-import { Service } from '../data';
+import { Service, handleImageError } from '../data';
 
 interface ServiceCardProps {
-  s: Service;
+  s?: Service;
+  service?: Service;
   isFav?: boolean;
   onToggleFav?: (id: number) => void;
 }
 
-export const ServiceCard: React.FC<ServiceCardProps> = ({ s, isFav = false, onToggleFav }) => {
+export const ServiceCard: React.FC<ServiceCardProps> = ({ s: propS, service, isFav = false, onToggleFav }) => {
+  const s = (service || propS);
+  if (!s) return null;
   const formatMoney = (n: number) => '₹' + n.toLocaleString('en-IN');
 
   const getAccentBadgeClass = (accent: string) => {
@@ -31,7 +34,12 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ s, isFav = false, onTo
       {/* Image Container with Badges */}
       <div className="service-image-box">
         <Link to={`/service/${s.id}`} aria-label={`View details of ${s.name}`}>
-          <img src={s.image} alt={s.name} loading="lazy" />
+          <img 
+            src={s.image} 
+            alt={s.name} 
+            loading="lazy" 
+            onError={handleImageError} 
+          />
         </Link>
         
         {/* Tag Badge */}

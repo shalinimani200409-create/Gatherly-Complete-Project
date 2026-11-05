@@ -23,7 +23,7 @@ export const Profile: React.FC<ProfileProps> = ({ role, notify }) => {
   return (
     <main className="page wrap narrow">
       <div className="flex items-center gap-3 mb-5 flex-wrap">
-        <BackButton to="/" label="Back" />
+        <BackButton fallbackTo="/dashboard" label="Back" />
         <div className="breadcrumb !mb-0">
           <Link to="/">Home</Link>
           <span>/</span>

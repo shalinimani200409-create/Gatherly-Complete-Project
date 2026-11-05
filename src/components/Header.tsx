@@ -71,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({ role, setRole, bookingsCount, no
             <nav className="nav-links">
               <NavLink to="/" end>Home</NavLink>
               <NavLink to="/explore">Explore</NavLink>
-              <a href="/#categories">Categories</a>
+              <NavLink to="/categories">Categories</NavLink>
               <a href="/#destinations">Destinations</a>
               <a href="/#why">Why Us</a>
             </nav>
@@ -237,14 +237,14 @@ export const Header: React.FC<HeaderProps> = ({ role, setRole, bookingsCount, no
                   <span>My Active Bookings</span>
                   {bookingsCount > 0 && <span className="badge-count">{bookingsCount}</span>}
                 </Link>
-                <a 
-                  href="/#categories" 
+                <NavLink 
+                  to="/categories" 
                   onClick={() => setMobileMenuOpen(false)}
                   className="py-2.5 px-3 rounded-lg hover:bg-slate-50 hover:text-blue-600 transition flex items-center justify-between"
                 >
-                  <span>Browse Categories</span>
+                  <span>Categories & 86 Subcategories</span>
                   <ArrowRight size={14} className="text-slate-400" />
-                </a>
+                </NavLink>
                 <a 
                   href="/#destinations" 
                   onClick={() => setMobileMenuOpen(false)}

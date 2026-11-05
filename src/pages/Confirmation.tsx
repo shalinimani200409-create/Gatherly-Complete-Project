@@ -41,7 +41,7 @@ export const Confirmation: React.FC<ConfirmationProps> = ({ bookings, notify }) 
     <main className="page wrap narrow confirmation-container">
       {/* Top Back Navigation */}
       <div className="flex items-center gap-3 mb-6 flex-wrap">
-        <BackButton to="/bookings" label="Back to Bookings" />
+        <BackButton fallbackTo="/bookings" label="Back" />
         <div className="breadcrumb !mb-0 text-sm">
           <Link to="/">Home</Link>
           <span>/</span>

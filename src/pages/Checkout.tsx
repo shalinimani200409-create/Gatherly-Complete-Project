@@ -75,7 +75,7 @@ export const Checkout: React.FC<CheckoutProps> = ({ bookings, notify }) => {
     <main className="page wrap narrow">
       {/* Breadcrumb Navigation & Back Button */}
       <div className="flex items-center gap-3 mb-5 flex-wrap">
-        <BackButton to={b?.serviceId ? `/book/${b.serviceId}` : '/explore'} label="Back to Step 1" />
+        <BackButton fallbackTo={b?.serviceId ? `/book/${b.serviceId}` : '/explore'} label="Back" />
         <div className="breadcrumb !mb-0">
           <Link to="/">Home</Link>
           <span>/</span>

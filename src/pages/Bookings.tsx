@@ -5,7 +5,7 @@ import {
   X, ArrowRight, ArrowLeft, Search, Printer, RotateCcw,
   Sparkles, ShieldCheck
 } from 'lucide-react';
-import { services } from '../data';
+import { services, handleImageError } from '../data';
 import { BackButton } from '../components/BackButton';
 
 interface Booking {
@@ -48,7 +48,7 @@ export const Bookings: React.FC<BookingsProps> = ({ bookings, update, notify }) 
     <main className="page wrap">
       {/* Breadcrumb Navigation & Back Button */}
       <div className="flex items-center gap-3 mb-5 flex-wrap">
-        <BackButton to="/" label="Back to Home" />
+        <BackButton fallbackTo="/" label="Back" />
         <div className="breadcrumb !mb-0 text-sm">
           <Link to="/">Home</Link>
           <span>/</span>
@@ -112,8 +112,9 @@ export const Bookings: React.FC<BookingsProps> = ({ bookings, update, notify }) 
                     <img 
                       src={svc.image} 
                       alt={b.service} 
-                      className="w-full h-full object-cover" 
+                      className="w-full h-full object-cover object-center" 
                       loading="lazy" 
+                      onError={handleImageError}
                     />
                   </div>
                   <div className="min-w-0 flex-1">
